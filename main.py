@@ -68,8 +68,13 @@ while running == True:
     for baseAngle in range(0, 2*math.floor(math.pi*1000), 40):
         angle = baseAngle/1000
         pygame.draw.circle(simSurface, [0,0,0,255],(centre[0] + rad*math.cos(angle),centre[1] + rad*math.sin(angle)),2)
+
+    #arrows
+    
+    
     pygame.draw.circle(simSurface, [0, 0, 0, 255], (centre[0] + rad*math.cos(t), centre[1]+rad*math.sin(t)), 30)
     pygame.draw.circle(simSurface, [0, 0, 0, 255], centre, 40)
+    pygame.draw.line(simSurface, [0, 0, 0, 255], (centre[0] + rad*math.cos(t), centre[1]+rad*math.sin(t)), centre, width = 3)
     screen.blit(simSurface,(0,0))
     screen.blit(menuSurface,(screenSize[0]-menuSize[0],0))
 
