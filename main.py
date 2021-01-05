@@ -15,7 +15,7 @@ screenSize = (1280, 720) #is this a good size, or 720p better?
 menuSize = (320, screenSize[1])
 simSize = (screenSize[0] - menuSize[0], screenSize[1])
 screen = pygame.display.set_mode(screenSize, pygame.RESIZABLE)
-pygame.display.set_caption("IPOMS")
+pygame.display.set_caption("Interactive Physics Orbital Mechanics Simulation (IPOMS)")
 screen.fill((0, 0, 0))
 
 
@@ -106,10 +106,12 @@ while running == True:
     
     pygame.draw.circle(simSurface, [30,30,255, 255], centre, radius_planet)
 
-
+    
     #BELOW FUNCTION WORKS WITH draw_arrow function
     pygame.draw.arrow(simSurface, [255, 255, 255, 255], (centre[0] + rad*math.cos(t), centre[1]+rad*math.sin(t)), (centre[0] + radius_planet*math.cos(t), centre[1]+radius_planet*math.sin(t)))
-    pygame.draw.arrow(simSurface, [255, 255, 255, 255], (centre[0] + rad*math.cos(t), centre[1]+rad*math.sin(t)), ((centre[0] + 1.1*rad*math.sin(90 + t), centre[1] - 1.1*rad*math.cos(90 + t))))
+    
+    offsetAngle = 0.5
+    pygame.draw.arrow(simSurface, [255, 255, 255, 255], (centre[0] + rad*math.cos(t), centre[1]+rad*math.sin(t)), (centre[0] + rad*1/math.cos(offsetAngle)*math.cos(t + offsetAngle), centre[1] + rad*1/math.cos(offsetAngle)*math.sin(t + offsetAngle)))
     ### WHEN F_g BUTTON COMES INTO CONTACT WITH MOUSE POINTER, CHANGE COLOUR OF ARROW (HIGHLIGHTING EFEFCT)
 
     pygame.draw.circle(simSurface, [187,187,187, 255], (centre[0] + rad*math.cos(t), centre[1]+rad*math.sin(t)), radius_satellite)
