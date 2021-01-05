@@ -56,7 +56,6 @@ while running == True:
 
     #resizing the window: [DO WE WANT IT SCALABLE? it might mess with our program...]
         if event.type == VIDEORESIZE:
-            print("event")
             screenSize = (event.w,event.h)
             menuSize = (menuSize[0],event.h)
             simSize = (screenSize[0] - menuSize[0], screenSize[1])
@@ -82,21 +81,11 @@ while running == True:
     for baseAngle in range(0, 2*math.floor(math.pi*1000), 40):
         angle = baseAngle/1000
         pygame.draw.circle(simSurface, [0,0,0,255],(centre[0] + rad*math.cos(angle),centre[1] + rad*math.sin(angle)),2)
-<<<<<<< HEAD
     pygame.draw.circle(simSurface, [187,187,187, 255], (centre[0] + rad*math.cos(t), centre[1]+rad*math.sin(t)), 30)
     pygame.draw.circle(simSurface, [30,30,255, 255], centre, 40)
     pygame.draw.line(simSurface, [255, 255, 255, 255], (centre[0] + rad*math.cos(t), centre[1]+rad*math.sin(t)), centre, width = 3)
 
 
-=======
-
-    #arrows
-    
-    
-    pygame.draw.circle(simSurface, [0, 0, 0, 255], (centre[0] + rad*math.cos(t), centre[1]+rad*math.sin(t)), 30)
-    pygame.draw.circle(simSurface, [0, 0, 0, 255], centre, 40)
-    pygame.draw.line(simSurface, [0, 0, 0, 255], (centre[0] + rad*math.cos(t), centre[1]+rad*math.sin(t)), centre, width = 3)
->>>>>>> a6b172965625a833ab5742b74426fcd904ce1725
     screen.blit(simSurface,(0,0))
     screen.blit(menuSurface,(screenSize[0]-menuSize[0],0))
 
