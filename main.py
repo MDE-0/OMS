@@ -1,6 +1,7 @@
 import pygame
-import tkinter
+import tkinter as tk
 import sys
+import math
 from pygame.locals import *
 from tkinter import *
 
@@ -14,10 +15,22 @@ screenSize = (1280, 720) #is this a good size, or 720p better?
 screen = pygame.display.set_mode(screenSize, pygame.RESIZABLE)
 pygame.display.set_caption("IPOMS")
 
+#tkinter settings screen set up
+root = tk.Tk() # create a Tk root window
+w = 720 #width
+h = 320 #height
+
+#def orbit variables:
+r = 320 #radius of orbit [user input]
+t = 0 #tickrate (milliseconds)
+T = 5 #period of orbit - [calculated] via eqn using user input for other values
+M = 10 #[user input]
+m = 10 #[user input]
+
 
 #display loop
 while running == True:
-
+    t = pygame.time.get_ticks()/1000
     screen.fill((255,255,255)) #maybe create toggle light vs dark mode
 
     #Quitting the simulation
@@ -38,13 +51,14 @@ while running == True:
         if event.type == VIDEORESIZE:
             screen = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
     
+    pygame.draw.circle(screen, [0, 0, 0, 255], (480, 360), 40) #replace 40 with "M"
+    pygame.draw.circle(screen, [0, 0, 0, 255], (480+r*math.cos(t*2*math.pi/T),360+r*math.sin(t*2*math.pi/T)), 30) #(480, 360) is centre of the LHS screen
 
-    
     pygame.display.update()
 
 
 #drawing a circle - idk why its not coming up; smth wrong with the numbers?
-pygame.draw.circle(screen, [255, 255, 255, 255], (500, 500), 100)
+
 
 #planet class
 
