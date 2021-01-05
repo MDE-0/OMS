@@ -1,6 +1,7 @@
 import pygame
 import tkinter
 import sys
+import math
 from pygame.locals import *
 from tkinter import *
 
@@ -11,18 +12,30 @@ running = True
 
 #pygame display set up
 screenSize = (1280, 720) #is this a good size, or 720p better?
+menuSize = (320, screenSize[1])
+simSize = (screenSize[0] - menuSize[0], screenSize[1])
 screen = pygame.display.set_mode(screenSize, pygame.RESIZABLE)
 pygame.display.set_caption("IPOMS")
 
 
+
+#def orbit variables:
+r = 320 #radius of orbit [user input]
+t = 0 #tickrate (milliseconds)
+T_calculated = 500000 #[calculated] via eqn using user input for other values
+T = T_calculated/100000 #period of orbit (perhaps x10^5 or smth, as otherwise it would be super) 
+M = 10 #[user input]
+m = 10 #[user input]
+
+
 #display loop
 while running == True:
-
-    screen.fill((255,255,255)) #maybe create toggle light vs dark mode
+    t = pygame.time.get_ticks()/1000
+    #maybe create toggle light vs dark mode
 
     #Quitting the simulation
     for event in pygame.event.get():
-        if event.type == pygame.QUIT:
+        if event.type == pygame.QUIT or (event.type == KEYDOWN and event.key == K_ESCAPE):
             pygame.quit()
             exit()
 
@@ -36,15 +49,31 @@ while running == True:
 
     #resizing the window: [DO WE WANT IT SCALABLE? it might mess with our program...]
         if event.type == VIDEORESIZE:
+            screenSize = (event.w,event.h)
+            menuSize = (menuSize[0],event.h)
+            simSize = (screenSize[0] - menuSize[0], screenSize[1])
             screen = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
     
+    simSurface = pygame.Surface((screenSize[0]-menuSize[0],screenSize[1]))
+    menuSurface = pygame.Surface(menuSize)
+
 
     
+
+
+    simSurface.fill((255,255,255))
+    menuSurface.fill((125,125,125,125))   
+    centre = (simSize[0]/2,simSize[1]/2)
+    rad = simSize[0]/5
+    for baseAngle in range(0, 2*math.floor(math.pi*1000), 40):
+        angle = baseAngle/1000
+        pygame.draw.circle(simSurface, [0,0,0,255],(centre[0] + rad*math.cos(angle),centre[1] + rad*math.sin(angle)),2)
+    pygame.draw.circle(simSurface, [0, 0, 0, 255], (centre[0] + rad*math.cos(t), centre[1]+rad*math.sin(t)), 30)
+    pygame.draw.circle(simSurface, [0, 0, 0, 255], centre, 40)
+    screen.blit(simSurface,(0,0))
+    screen.blit(menuSurface,(screenSize[0]-menuSize[0],0))
+
     pygame.display.update()
-
-
-#drawing a circle - idk why its not coming up; smth wrong with the numbers?
-pygame.draw.circle(screen, [255, 255, 255, 255], (500, 500), 100)
 
 #planet class
 
