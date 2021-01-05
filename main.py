@@ -62,7 +62,6 @@ while running == True:
 
     #resizing the window: [DO WE WANT IT SCALABLE? it might mess with our program...]
         if event.type == VIDEORESIZE:
-            print("event")
             screenSize = (event.w,event.h)
             menuSize = (menuSize[0],event.h)
             simSize = (screenSize[0] - menuSize[0], screenSize[1])
