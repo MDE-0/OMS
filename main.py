@@ -24,21 +24,38 @@ clock = pygame.time.Clock()
 
 
 #def orbit variables:
-r = ["Radius [R(m)]",320] #radius of orbit [user input]
+vars = {
+    'r' : ["Radius [R(m)]",320],#radius of orbit [user input]
+    'M' : ["M mass [M(kg)]",10], #[user input]
+    'm' : ["m mass [m(kg)]",10], #[user input]
+}
 t = 0 #tickrate (milliseconds)
 T_calculated = ["Period [T(s)]",500000] #[calculated] via eqn using user input for other values
 T = T_calculated[1]/100000 #period of orbit (perhaps x10^5 or smth, as otherwise it would be super) 
-M = ["M mass [M(kg)]",10] #[user input]
-m = ["m mass [m(kg)]",10] #[user input]
-
-
-
-
 stars = []
 
 def genStars():
     for i in range(100):
         stars.append((randint(0, simSize[0]), randint(0, simSize[1])))
+
+class button(object):
+        def __init__(self, var, y_placement):
+            self.var = var
+            self.var_name = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((0,y_placement*50), (120, 50)), text = f"{vars[self.var][0]}", manager = manager)
+            self.increase = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((120,y_placement*50), (50, 50)), text = "↑", manager = manager)
+            self.decrease = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((170, y_placement*50), (50, 50)), text = "↓", manager = manager)
+            self.value = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((220, y_placement*50), (100, 50)), text = f"{vars[self.var][1]}", manager = manager)
+        
+            
+ind = 0
+buttons = []
+for name in vars:
+    list.append(buttons, button(name, ind))
+    ind = ind + 1
+
+
+
+
 
 genStars()
 
@@ -53,32 +70,22 @@ while running == True:
         if event.type == pygame.QUIT or (event.type == KEYDOWN and event.key == K_ESCAPE):
             pygame.quit()
             exit()
-        manager.process_events(event)
-
-        # if event.type == pygame_gui.UI_BUTTON_PRESSED:
-        #     if event.ui_element == self.increase:
-        #         self.var[1] += 5
-        #         print(self.var[1])
-        #     if event.ui_element == self.decrease:
-        #         self.var[1] -= 5
-        #         print(self.var[1])
-    
-    
-    
-
-    #Settings menu (Located top right of the program), which includes options such as changing variables, and includes formulae values and information about the orbit/s
-        # if event.type == KEYDOWN:
-            # if event.key == K_ESCAPE:
-                
-
-    #resizing the window: [DO WE WANT IT SCALABLE? it might mess with our program...]
-        if event.type == VIDEORESIZE:
+       
+        elif event.type == VIDEORESIZE:
             screenSize = (event.w,event.h)
             menuSize = (menuSize[0],event.h)
             simSize = (screenSize[0] - menuSize[0], screenSize[1])
             screen = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
             stars = []
             genStars()
+        elif event.type == pygame.USEREVENT and event.user_type == pygame_gui.UI_BUTTON_PRESSED:
+            for but in buttons:
+                if event.ui_element == but.increase:
+                    vars[but.var] += 5
+                elif event.ui_element == but.decrease:
+                    vars[but.var] += 5
+        print(event.type)
+        manager.process_events(event)
     
     
     
@@ -130,36 +137,17 @@ while running == True:
 
     
     #defining buttons
-    class button(object):
-        def __init__(self, var, y_placement):
-            self.var = var
-            self.var_name = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((0,y_placement*50), (120, 50)), text = f"{self.var[0]}", manager = manager)
-            self.increase = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((120,y_placement*50), (50, 50)), text = "↑", manager = manager)
-            self.decrease = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((170, y_placement*50), (50, 50)), text = "↓", manager = manager)
-            self.value = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((220, y_placement*50), (100, 50)), text = f"{self.var[1]}", manager = manager)
-            
-            for event in pygame.event.get():
-                if event.type == pygame_gui.UI_BUTTON_PRESSED:
-                    if event.ui_element == self.increase:
-                        self.var[1] += 5
-                        print(self.var[1])
-                    if event.ui_element == self.decrease:
-                        self.var[1] -= 5
-                        print(self.var[1])
+    
 
 
 
-    button(r, 0)
-    button(M, 1)
-    button(m, 2)
-    button(T_calculated, 3)
+
 
     
 
     
 
     #I'm not sure why this isn't working....
-    manager.draw_ui(menuSurface)
     screen.blit(simSurface,(0,0))
     manager.draw_ui(menuSurface)
     screen.blit(menuSurface,(screenSize[0]-menuSize[0],0))
