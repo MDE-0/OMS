@@ -44,7 +44,7 @@ genStars()
 
 #display loop
 while running == True:
-    time_delta = clock.tick(60)/1000.0
+    time_delta = clock.tick(144)/1000.0
     t = pygame.time.get_ticks()/1000
     #maybe create toggle light vs dark mode
 
@@ -73,7 +73,8 @@ while running == True:
             stars = []
             genStars()
     
-    manager.update(time_delta)
+    
+    
     
     simSurface = pygame.Surface((screenSize[0]-menuSize[0],screenSize[1]))
     menuSurface = pygame.Surface(menuSize)
@@ -132,8 +133,9 @@ while running == True:
     # manager.set_visual_debug_mode(True)
     
 
-
+    
     pygame.display.update()
+    manager.update(time_delta)
 
 #planet class
 
