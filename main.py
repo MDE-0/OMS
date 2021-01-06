@@ -24,12 +24,12 @@ clock = pygame.time.Clock()
 
 
 #def orbit variables:
-r = 320 #radius of orbit [user input]
+r = ["Radius [R(m)]",320] #radius of orbit [user input]
 t = 0 #tickrate (milliseconds)
-T_calculated = 500000 #[calculated] via eqn using user input for other values
-T = T_calculated/100000 #period of orbit (perhaps x10^5 or smth, as otherwise it would be super) 
-M = 10 #[user input]
-m = 10 #[user input]
+T_calculated = ["Period [T(s)]",500000] #[calculated] via eqn using user input for other values
+T = T_calculated[1]/100000 #period of orbit (perhaps x10^5 or smth, as otherwise it would be super) 
+M = ["Planet's mass [M(kg)]",10] #[user input]
+m = ["Satellite's mass [m(kg)]",10] #[user input]
 
 
 
@@ -121,14 +121,24 @@ while running == True:
 
     pygame.draw.circle(simSurface, [187,187,187, 255], (centre[0] + rad*math.cos(t), centre[1]+rad*math.sin(t)), radius_satellite)
 
+    
     #defining buttons
-    button_r = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((1100, 265), (100, 50)), text = "Radius", manager = manager)
+    def button(var, y_placement):
+        increase_r = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((0,y_placement*50), (100, 50)), text = f"{var[0]} ↑", manager = manager)
+        decrease_r = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((100, y_placement*50), (100, 50)), text = f"{var[0]} ↓", manager = manager)
+        value_r = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((200, y_placement*50), (100, 50)), text = f"{var[0]} = {var[1]}", manager = manager)
+    button(r, 0)
+
+    
+
+    
+
     #I'm not sure why this isn't working....
     
     screen.blit(simSurface,(0,0))
-    
-    screen.blit(menuSurface,(screenSize[0]-menuSize[0],0))
     manager.draw_ui(menuSurface)
+    screen.blit(menuSurface,(screenSize[0]-menuSize[0],0))
+    
 
     # manager.set_visual_debug_mode(True)
     
