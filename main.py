@@ -134,7 +134,7 @@ while running == True:
     
 
     #I'm not sure why this isn't working....
-    
+    manager.draw_ui(menuSurface)
     screen.blit(simSurface,(0,0))
     manager.draw_ui(menuSurface)
     screen.blit(menuSurface,(screenSize[0]-menuSize[0],0))
