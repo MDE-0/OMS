@@ -28,8 +28,8 @@ r = ["Radius [R(m)]",320] #radius of orbit [user input]
 t = 0 #tickrate (milliseconds)
 T_calculated = ["Period [T(s)]",500000] #[calculated] via eqn using user input for other values
 T = T_calculated[1]/100000 #period of orbit (perhaps x10^5 or smth, as otherwise it would be super) 
-M = ["Planet's mass [M(kg)]",10] #[user input]
-m = ["Satellite's mass [m(kg)]",10] #[user input]
+M = ["M mass [M(kg)]",10] #[user input]
+m = ["m mass [m(kg)]",10] #[user input]
 
 
 
@@ -54,7 +54,14 @@ while running == True:
             pygame.quit()
             exit()
         manager.process_events(event)
-    
+
+        # if event.type == pygame_gui.UI_BUTTON_PRESSED:
+        #     if event.ui_element == self.increase:
+        #         self.var[1] += 5
+        #         print(self.var[1])
+        #     if event.ui_element == self.decrease:
+        #         self.var[1] -= 5
+        #         print(self.var[1])
     
     
     
@@ -123,11 +130,29 @@ while running == True:
 
     
     #defining buttons
-    def button(var, y_placement):
-        increase_r = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((0,y_placement*50), (100, 50)), text = f"{var[0]} ↑", manager = manager)
-        decrease_r = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((100, y_placement*50), (100, 50)), text = f"{var[0]} ↓", manager = manager)
-        value_r = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((200, y_placement*50), (100, 50)), text = f"{var[0]} = {var[1]}", manager = manager)
+    class button(object):
+        def __init__(self, var, y_placement):
+            self.var = var
+            self.var_name = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((0,y_placement*50), (120, 50)), text = f"{self.var[0]}", manager = manager)
+            self.increase = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((120,y_placement*50), (50, 50)), text = "↑", manager = manager)
+            self.decrease = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((170, y_placement*50), (50, 50)), text = "↓", manager = manager)
+            self.value = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((220, y_placement*50), (100, 50)), text = f"{self.var[1]}", manager = manager)
+            
+            for event in pygame.event.get():
+                if event.type == pygame_gui.UI_BUTTON_PRESSED:
+                    if event.ui_element == self.increase:
+                        self.var[1] += 5
+                        print(self.var[1])
+                    if event.ui_element == self.decrease:
+                        self.var[1] -= 5
+                        print(self.var[1])
+
+
+
     button(r, 0)
+    button(M, 1)
+    button(m, 2)
+    button(T_calculated, 3)
 
     
 
