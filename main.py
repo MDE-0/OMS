@@ -172,17 +172,3 @@ while running == True:
     pygame.display.update()
     manager.update(time_delta)
 
-#planet class
-
-# class Planet()
-
-
-
-#settings menu
-
-
-
-
-
-
-#Hey, Sam, if we get this to work, we could build more simulations ahahaha.. could even make a website to collate them; but im probs being too ambitious rn LOL
