@@ -1,9 +1,9 @@
 import pygame
-import tkinter as tk
+import pygame_gui
 import sys
 import math
 from pygame.locals import *
-from tkinter import *
+
 from random import randint
 
 pygame.init()
@@ -11,12 +11,16 @@ running = True
 
 
 #pygame display set up
-screenSize = (1280, 720) #is this a good size, or 720p better?
+screenSize = (1280, 720) #is this a good size, or 1080p better?
 menuSize = (320, screenSize[1])
 simSize = (screenSize[0] - menuSize[0], screenSize[1])
 screen = pygame.display.set_mode(screenSize, pygame.RESIZABLE)
 pygame.display.set_caption("Interactive Physics Orbital Mechanics Simulation (IPOMS)")
 screen.fill((0, 0, 0))
+
+#Python GUI menu
+manager = pygame_gui.UIManager(menuSize)
+clock = pygame.time.Clock()
 
 
 #def orbit variables:
@@ -27,10 +31,7 @@ T = T_calculated/100000 #period of orbit (perhaps x10^5 or smth, as otherwise it
 M = 10 #[user input]
 m = 10 #[user input]
 
-def increase(variable):
-    variable += 5
-def decrease(variable):
-    variable -= 5
+
 
 
 stars = []
@@ -43,6 +44,7 @@ genStars()
 
 #display loop
 while running == True:
+    time_delta = clock.tick(60)/1000.0
     t = pygame.time.get_ticks()/1000
     #maybe create toggle light vs dark mode
 
@@ -51,9 +53,11 @@ while running == True:
         if event.type == pygame.QUIT or (event.type == KEYDOWN and event.key == K_ESCAPE):
             pygame.quit()
             exit()
-
-    #Full screening the simulation
-        # if event.type == 
+        manager.process_events(event)
+    
+    
+    
+    
 
     #Settings menu (Located top right of the program), which includes options such as changing variables, and includes formulae values and information about the orbit/s
         # if event.type == KEYDOWN:
@@ -69,7 +73,7 @@ while running == True:
             stars = []
             genStars()
     
-
+    manager.update(time_delta)
     
     simSurface = pygame.Surface((screenSize[0]-menuSize[0],screenSize[1]))
     menuSurface = pygame.Surface(menuSize)
@@ -77,10 +81,10 @@ while running == True:
 
 
     simSurface.fill((0,0,0))
-    menuSurface.fill((125,125,125,125)) 
+    menuSurface.fill((200,200,200,200)) 
     
-    #Adding buttons in the menu
-    # button_r = Button(menuSurface, text = "Radius", command = increase(r))
+    
+    
 
 
     for i in range(100):
@@ -116,8 +120,18 @@ while running == True:
 
     pygame.draw.circle(simSurface, [187,187,187, 255], (centre[0] + rad*math.cos(t), centre[1]+rad*math.sin(t)), radius_satellite)
 
+    #defining buttons
+    button_r = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((1100, 265), (100, 50)), text = "Radius", manager = manager)
+    #I'm not sure why this isn't working....
+    
     screen.blit(simSurface,(0,0))
+    
     screen.blit(menuSurface,(screenSize[0]-menuSize[0],0))
+    manager.draw_ui(menuSurface)
+
+    # manager.set_visual_debug_mode(True)
+    
+
 
     pygame.display.update()
 
