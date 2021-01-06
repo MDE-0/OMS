@@ -121,13 +121,14 @@ while running == True:
     pygame.draw.circle(simSurface, [187,187,187, 255], (centre[0] + rad*math.cos(t), centre[1]+rad*math.sin(t)), radius_satellite)
 
     #defining buttons
-    button_r = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((1100, 265), (100, 50)), text = "Radius", manager = manager)
+    button_r = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((0, 0), (100, 50)), text = "Radius", manager = manager)
+
     #I'm not sure why this isn't working....
-    
+    manager.draw_ui(menuSurface)
     screen.blit(simSurface,(0,0))
     
     screen.blit(menuSurface,(screenSize[0]-menuSize[0],0))
-    manager.draw_ui(menuSurface)
+ 
 
     # manager.set_visual_debug_mode(True)
     
