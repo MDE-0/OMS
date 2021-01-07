@@ -68,11 +68,13 @@ while running == True:
 
         if event.type == pygame_gui.UI_BUTTON_PRESSED:
             if event.ui_element == r.increase:
-                r.var[1] += 5
+                r[1] += 5
                 r.value = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((simSize[0] + 220, y_placement*50), (100, 50)), text = f"{r.var[1]}", manager = manager)
+                print(r[1])
             if event.ui_element == r.decrease:
-                r.var[1] -= 5
+                r[1] -= 5
                 r.value = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((simSize[0] + 220, y_placement*50), (100, 50)), text = f"{r.var[1]}", manager = manager)
+                print(r[1])
     
     
     

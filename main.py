@@ -41,10 +41,10 @@ def genStars():
 class button(object):
         def __init__(self, var, y_placement):
             self.var = var
-            self.var_name = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((0,y_placement*50), (120, 50)), text = f"{vars[self.var][0]}", manager = manager)
-            self.increase = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((120,y_placement*50), (50, 50)), text = "↑", manager = manager)
-            self.decrease = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((170, y_placement*50), (50, 50)), text = "↓", manager = manager)
-            self.value = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((220, y_placement*50), (100, 50)), text = f"{vars[self.var][1]}", manager = manager)
+            self.var_name = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((simSize[0],y_placement*50), (120, 50)), text = f"{vars[self.var][0]}", manager = manager)
+            self.increase = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((simSize[0]+120,y_placement*50), (50, 50)), text = "↑", manager = manager)
+            self.decrease = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((simSize[0]+170, y_placement*50), (50, 50)), text = "↓", manager = manager)
+            self.value = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((simSize[0]+220, y_placement*50), (100, 50)), text = f"{vars[self.var][1]}", manager = manager)
         
             
 ind = 0
@@ -146,7 +146,7 @@ while running == True:
     
 
     
-
+    manager.update(time_delta)
     #I'm not sure why this isn't working....
     screen.blit(simSurface,(0,0))
     screen.blit(menuSurface,(screenSize[0]-menuSize[0],0))
