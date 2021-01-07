@@ -67,19 +67,17 @@ while running == True:
         manager.process_events(event)
 
         if event.type == pygame_gui.UI_BUTTON_PRESSED:
-            if event.ui_element == self.increase:
-                self.var[1] += 5
-                print(self.var[1])
-            if event.ui_element == self.decrease:
-                self.var[1] -= 5
-                print(self.var[1])
+            if event.ui_element == r.increase:
+                r.var[1] += 5
+                r.value = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((simSize[0] + 220, y_placement*50), (100, 50)), text = f"{r.var[1]}", manager = manager)
+            if event.ui_element == r.decrease:
+                r.var[1] -= 5
+                r.value = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((simSize[0] + 220, y_placement*50), (100, 50)), text = f"{r.var[1]}", manager = manager)
     
     
     
 
-    #Settings menu (Located top right of the program), which includes options such as changing variables, and includes formulae values and information about the orbit/s
-        # if event.type == KEYDOWN:
-            # if event.key == K_ESCAPE:
+
                 
 
     #resizing the window: [DO WE WANT IT SCALABLE? it might mess with our program...]
@@ -90,7 +88,7 @@ while running == True:
             screen = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
             stars = []
             genStars()
-    
+        manager.process_events(event)
     
     
     
