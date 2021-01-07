@@ -3,7 +3,7 @@ import pygame_gui
 import sys
 import math
 from pygame.locals import *
-
+from sigfig import round as rd
 from random import randint
 
 pygame.init()
@@ -25,14 +25,17 @@ clock = pygame.time.Clock()
 
 #def orbit variables:
 vars = {
-    'r' : ["Radius [R(m)]",320],#radius of orbit [user input]
-    'M' : ["M mass [M(kg)]",10], #[user input]
-    'm' : ["m mass [m(kg)]",10], #[user input]
+    'r' : ["Radius [R(m)]",320,5],#radius of orbit [user input]
+    'M' : ["M mass [M(kg)]",500,50], #[user input]
+    'm' : ["m mass [m(kg)]",200,50], #[user input]
 }
 t = 0 #tickrate (milliseconds)
-T_calculated = ["Period [T(s)]",500000] #[calculated] via eqn using user input for other values
-T = T_calculated[1]/100000 #period of orbit (perhaps x10^5 or smth, as otherwise it would be super) 
+#T_calculated = ["Period [T(s)]",500000] #[calculated] via eqn using user input for other values
+#T = T_calculated[1]/100000 #period of orbit (perhaps x10^5 or smth, as otherwise it would be super) 
 stars = []
+
+G = 6.67 * 10**(-11)
+
 
 def genStars():
     for i in range(100):
@@ -46,17 +49,19 @@ class button(object):
         self.increase = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((simSize[0] + 120,y_placement*50), (50, 50)), text = "↑", manager = manager)
         self.decrease = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((simSize[0] + 170, y_placement*50), (50, 50)), text = "↓", manager = manager)
         self.value = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((simSize[0] + 220, y_placement*50), (100, 50)), text = f"{vars[self.var][1]}", manager = manager)
-        
+
+T_name = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((simSize[0],200), (150, 50)), text = "Period [T(s)]", manager = manager)
+g_name = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((simSize[0], 250), (150, 50)), text = "g[m/s²]", manager = manager)
+F_name = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((simSize[0], 300), (150, 50)), text = "F[kgm/s²]", manager = manager)
+v_name = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((simSize[0], 350), (150, 50)), text = "v[m/s]", manager = manager)
+
+
             
 ind = 0
 buttons = []
 for name in vars:
     list.append(buttons, button(name, ind))
     ind = ind + 1
-
-
-
-
 
 genStars()
 
@@ -82,11 +87,11 @@ while running == True:
         elif event.type == pygame.USEREVENT and event.user_type == pygame_gui.UI_BUTTON_PRESSED:
             for but in buttons:
                 if event.ui_element == but.increase: 
-                    vars[but.var][1] += 5
+                    vars[but.var][1] += vars[but.var][2]
                     but.value.kill()
                     but.value = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((simSize[0] + 220, but.y_placement*50), (100, 50)), text = f"{vars[but.var][1]}", manager = manager)
-                elif event.ui_element == but.decrease:
-                    vars[but.var][1] -= 5
+                elif event.ui_element == but.decrease and vars[but.var][1] > vars[but.var][2]:
+                    vars[but.var][1] -= vars[but.var][2]
                     but.value.text = f"{vars[but.var][1]}"
                     but.value.kill()
                     but.value = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((simSize[0] + 220, but.y_placement*50), (100, 50)), text = f"{vars[but.var][1]}", manager = manager)
@@ -111,9 +116,18 @@ while running == True:
     
     centre = (simSize[0]/2,simSize[1]/2)
 
-
-    radius_planet = 40
-    radius_satellite = 30
+    v = math.sqrt((G*vars["M"][1]*(10**20))/vars["r"][1]*1000)
+    T = (2*math.pi*vars["r"][1]*1000)/v
+    g = ((G*vars["M"][1]*(10**20)))/((vars["r"][1]*1000)**2)
+    F = g*vars["m"][1]*(10**20)                                                    
+        
+    T_val = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((simSize[0]+150,200), (100, 50)), text = f"{rd(T,2)}", manager = manager)
+    g_val = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((simSize[0]+150, 250), (100, 50)), text = f"{rd(g,2)}", manager = manager)
+    F_val = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((simSize[0]+150, 300), (100, 50)), text = rd(str(F),sigfigs = 2, notation = 'scientific'), manager = manager)
+    v_val = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((simSize[0]+150, 350), (100, 50)), text = f"{rd(v,2)}", manager = manager)
+    
+    radius_planet = 5*vars["M"][1]**(1/3)
+    radius_satellite = 5*vars["m"][1]**(1/3)
     for baseAngle in range(0, 2*math.floor(math.pi*1000), 40):
         angle = baseAngle/1000
         pygame.draw.circle(simSurface, [173,255,47,255],(centre[0] + vars["r"][1]*math.cos(angle),centre[1] + vars["r"][1]*math.sin(angle)), 1)
@@ -131,13 +145,13 @@ while running == True:
 
     
     #BELOW FUNCTION WORKS WITH draw_arrow function
-    pygame.draw.arrow(simSurface, [255, 255, 255, 255], (centre[0] + vars["r"][1]*math.cos(t), centre[1]+vars["r"][1]*math.sin(t)), (centre[0] + radius_planet*math.cos(t), centre[1]+radius_planet*math.sin(t)))
+    pygame.draw.arrow(simSurface, [255, 255, 255, 255], (centre[0] + vars["r"][1]*math.cos(t*2*math.pi / T), centre[1]+vars["r"][1]*math.sin(t*2*math.pi / T)), (centre[0] + radius_planet*math.cos(t*2*math.pi / T), centre[1]+radius_planet*math.sin(t*2*math.pi / T)))
     
     offsetAngle = 0.5
-    pygame.draw.arrow(simSurface, [255, 255, 255, 255], (centre[0] + vars["r"][1]*math.cos(t), centre[1]+vars["r"][1]*math.sin(t)), (centre[0] + vars["r"][1]*1/math.cos(offsetAngle)*math.cos(t + offsetAngle), centre[1] + vars["r"][1]*1/math.cos(offsetAngle)*math.sin(t + offsetAngle)))
+    pygame.draw.arrow(simSurface, [255, 255, 255, 255], (centre[0] + vars["r"][1]*math.cos(t*2*math.pi / T), centre[1]+vars["r"][1]*math.sin(t*2*math.pi / T)), (centre[0] + vars["r"][1]*1/math.cos(offsetAngle)*math.cos(t*2*math.pi / T + offsetAngle), centre[1] + vars["r"][1]*1/math.cos(offsetAngle)*math.sin(t*2*math.pi / T + offsetAngle)))
     ### WHEN F_g BUTTON COMES INTO CONTACT WITH MOUSE POINTER, CHANGE COLOUR OF ARROW (HIGHLIGHTING EFEFCT)
 
-    pygame.draw.circle(simSurface, [187,187,187, 255], (centre[0] + vars["r"][1]*math.cos(t), centre[1]+vars["r"][1]*math.sin(t)), radius_satellite)
+    pygame.draw.circle(simSurface, [187,187,187, 255], (centre[0] + vars["r"][1]*math.cos(t*2*math.pi / T), centre[1]+vars["r"][1]*math.sin(t*2*math.pi / T)), radius_satellite)
     
     
     #defining buttons
@@ -162,4 +176,7 @@ while running == True:
     
     pygame.display.update()
     manager.update(time_delta)
-
+    T_val.kill()
+    g_val.kill()
+    F_val.kill()
+    v_val.kill()
