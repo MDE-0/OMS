@@ -48,7 +48,7 @@ class button(object):
         self.var_name = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((simSize[0] + 0,y_placement*50), (120, 50)), text = f"{vars[self.var][0]}", manager = manager)
         self.increase = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((simSize[0] + 120,y_placement*50), (50, 50)), text = "↑", manager = manager)
         self.decrease = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((simSize[0] + 170, y_placement*50), (50, 50)), text = "↓", manager = manager)
-        self.value = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((simSize[0] + 220, y_placement*50), (100, 50)), text = f"{rd(str(vars[self.var][1]), sigfigs = 3, notation = 'scientific')}", manager = manager)
+        self.value = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((simSize[0] + 220, y_placement*50), (100, 50)), text = f"{rd(str(vars[self.var][1]), sigfigs = 4, notation = 'scientific')}", manager = manager)
 
 T_name = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((simSize[0],200), (200, 50)), text = "Period [T(s)]", manager = manager)
 g_name = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((simSize[0], 250), (200, 50)), text = "Field Strength [g(m/s²)]", manager = manager)
@@ -89,12 +89,12 @@ while running == True:
                 if event.ui_element == but.increase: 
                     vars[but.var][1] += vars[but.var][2]
                     but.value.kill()
-                    but.value = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((simSize[0] + 220, but.y_placement*50), (100, 50)), text = f"{rd(str(vars[but.var][1]), sigfigs = 2, notation = 'scientific')}", manager = manager)
+                    but.value = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((simSize[0] + 220, but.y_placement*50), (100, 50)), text = f"{rd(str(vars[but.var][1]), sigfigs = 4, notation = 'scientific')}", manager = manager)
                 elif event.ui_element == but.decrease and vars[but.var][1] > vars[but.var][2]:
                     vars[but.var][1] -= vars[but.var][2]
                     but.value.text = f"{vars[but.var][1]}"
                     but.value.kill()
-                    but.value = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((simSize[0] + 220, but.y_placement*50), (100, 50)), text = f"{rd(str(vars[but.var][1]), sigfigs = 2, notation = 'scientific')}", manager = manager)
+                    but.value = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((simSize[0] + 220, but.y_placement*50), (100, 50)), text = f"{rd(str(vars[but.var][1]), sigfigs = 4, notation = 'scientific')}", manager = manager)
         manager.process_events(event)
     
     
@@ -121,10 +121,10 @@ while running == True:
     g = ((G*vars["M"][1]))/((vars["r"][1]*0.01)**2)
     F = g*vars["m"][1]                                                    
         
-    T_val = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((simSize[0]+200,200), (120, 50)), text = f"{rd(T,2)}", manager = manager)
-    g_val = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((simSize[0]+200, 250), (120, 50)), text = f"{rd(g,2)}", manager = manager)
-    F_val = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((simSize[0]+200, 300), (120, 50)), text = rd(str(F), sigfigs = 3, notation = 'scientific'), manager = manager)
-    v_val = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((simSize[0]+200, 350), (120, 50)), text = f"{rd(v,2)}", manager = manager)
+    T_val = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((simSize[0]+200,200), (120, 50)), text = rd(str(T), sigfigs = 4, notation = 'scientific'), manager = manager)
+    g_val = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((simSize[0]+200, 250), (120, 50)), text = rd(str(g), sigfigs = 4, notation = 'scientific'), manager = manager)
+    F_val = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((simSize[0]+200, 300), (120, 50)), text = rd(str(F), sigfigs = 4, notation = 'scientific'), manager = manager)
+    v_val = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((simSize[0]+200, 350), (120, 50)), text = rd(str(v), sigfigs = 4, notation = 'scientific'), manager = manager)
     
     radius_planet = 5*((vars["M"][1])*(1/(10**(20))))**(1/3)
     radius_satellite = 5*((vars["m"][1])*(1/(10**(20))))**(1/3)
